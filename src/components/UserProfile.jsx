@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 function UserProfile() {
   const [user, setUser] = useState(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
     fetchUser()
