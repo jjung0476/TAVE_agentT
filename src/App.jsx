@@ -1,42 +1,72 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import MainPage from './pages/MainPage'
+import DetailPage from './pages/DetailPage'
+import SettingsPage from './pages/SettingsPage.jsx'
 import './App.css'
-import TextInput from './components/TextInput'
-import TaskList from './components/TaskList'
-import UserProfile from './components/UserProfile'
 
 function App() {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState([
+    { id: 1, text: '리액트 공부하기', done: false, category: '학습', priority: 'high' },
+    { id: 2, text: '운동 30분', done: true, category: '건강', priority: 'medium' },
+    { id: 3, text: '장보기', done: false, category: '생활', priority: 'low' },
+  ])
 
   // 추가 함수
-  const addTodo = (text) => {
-    const newTodo = { id: Date.now(), text, done: false };
-    setTodos([...todos, newTodo]);
-  };
+  // prev -> 함수형 업데이트로 stale closure 방지
+  const addTodo = (text, category, priority) => {
+    const newTodo = { id: Date.now(), text, done: false, category, priority }
+    setTodos(prev => [...prev, newTodo])
+  }
 
   // 완료 함수
   const toggleTodo = (id) => {
-    setTodos(todos.map(todo => 
-      todo.id === id ? { ...todo, done: !todo.done } : todo
-    ));
-  };
+    setTodos(prev =>
+      prev.map(todo =>
+        todo.id === id ? { ...todo, done: !todo.done } : todo
+      )
+    )
+  }
 
   // 삭제 함수
   const deleteTodo = (id) => {
-    setTodos(todos.filter(todo => todo.id !== id));
-  };
+    setTodos(prev => prev.filter(todo => todo.id !== id))
+  }
+
+  // 갱신 함수
+  const updateTodo = (id, newText, newCategory, newPriority) => {
+    setTodos(prev =>
+      prev.map(todo =>
+        todo.id === id
+          ? { ...todo, text: newText, category: newCategory, priority: newPriority }
+          : todo
+      )
+    )
+  }
 
   return (
-    <div className="App">
-      <h1>My Todo List</h1>
-      <UserProfile />
-      <hr />
-      <TextInput onAdd={addTodo} />
-      <TaskList todos={todos} onToggle={toggleTodo} onDelete={deleteTodo} />
-    </div>
-  );
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <MainPage
+              todos={todos}
+              onAdd={addTodo}
+              onToggle={toggleTodo}
+              onDelete={deleteTodo}
+              onUpdate={updateTodo}
+            />
+          }
+        />
+        <Route
+          path="/todo/:id"
+          element={<DetailPage todos={todos} onToggle={toggleTodo} onDelete={deleteTodo} />}
+        />
+        <Route path="/settings" element={<SettingsPage />} />
+      </Routes>
+    </BrowserRouter>
+  )
 }
 
 export default App
