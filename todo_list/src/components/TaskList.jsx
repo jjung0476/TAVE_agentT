@@ -53,14 +53,16 @@ function TaskItem({ todo, onToggle, onDelete, onUpdate, onNavigate }) {
   }
  
   return (
-    <li style={{ textDecoration: todo.done ? 'line-through' : 'none', marginBottom: '10px', color: todo.done ? '#888' : '#000' }}>
+    <li style={{ marginBottom: '10px' }}>
       <div style={{ display: 'inline-flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-        <span
-          style={{ textAlign: 'left', flex: 1, cursor: 'pointer' }}
-          onClick={() => onNavigate(todo.id)}
-        >
-          {todo.text}
-          <small style={{ marginLeft: '6px', color: '#999', fontSize: '12px' }}>{todo.category}</small>
+        <span style={{ textAlign: 'left', flex: 1, cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+          onClick={() => onNavigate(todo.id)}>
+          <span style={{ textDecoration: todo.done ? 'line-through' : 'none', color: todo.done ? '#888' : '#000' }}>
+            {todo.text}
+          </span>
+          <small style={{ marginLeft: '6px', color: '#999', fontSize: '12px', textDecoration: 'none' }}>
+            {todo.category}
+          </small>
         </span>
         <div style={{ display: 'flex', gap: '5px', marginLeft: '10px' }}>
           <button onClick={() => onToggle(todo.id)} style={{ padding: '3px 7px' }}>
