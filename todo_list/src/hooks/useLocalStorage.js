@@ -19,7 +19,6 @@ function useLocalStorage(key, initialValue) {
   })
 
   // agent-skills: rerender-functional-setstate
-  // 함수형 업데이트를 지원하는 setValue 래퍼
   const setValue = useCallback((value) => {
     try {
       setStoredValue(prev => {
